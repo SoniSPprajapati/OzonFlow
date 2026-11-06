@@ -72,20 +72,28 @@ export default function AccountsPage() {
     }
 
     try {
-      if (editingAccount) {
-        const res = await fetch(`/api/accounts/${editingAccount.id}`, {
-          method: "PUT",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ name, clientId, apiKey, isEnabled }),
-        });
-        if (!res.ok) throw new Error((await res.json()).error);
-      } else {
-        const res = await fetch("/api/accounts", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ name, clientId, apiKey, isEnabled }),
-        });
-        if (!res.ok) throw new Error((await res.json()).error);
+      const res = editingAccount
+        ? await fetch(`/api/accounts/${editingAccount.id}`, {
+            method: "PUT",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ name, clientId, apiKey, isEnabled }),
+          })
+        : await fetch("/api/accounts", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ name, clientId, apiKey, isEnabled }),
+          });
+
+      if (!res.ok) {
+        let errMsg = `Request failed with status ${res.status}`;
+        try {
+          const data = await res.json();
+          if (data?.error) errMsg = data.error;
+        } catch {
+          const text = await res.text().catch(() => "");
+          if (text) errMsg = text;
+        }
+        throw new Error(errMsg);
       }
 
       setIsModalOpen(false);
