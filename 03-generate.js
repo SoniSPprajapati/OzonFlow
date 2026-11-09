@@ -149,18 +149,42 @@ export async function generatePdfs(runDir, logger) {
   // ✅ SMART CHROME LAUNCH (AUTO + FALLBACK)
   let browser;
 
-  try {
-    // Try system Chrome
+  const candidatePaths = [
+    "C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe",
+    "C:\\Program Files (x86)\\Google\\Chrome\\Application\\chrome.exe",
+    "/usr/bin/google-chrome",
+    "/usr/bin/google-chrome-stable",
+    "/usr/bin/chromium",
+    "/usr/bin/chromium-browser",
+  ];
+
+  const fs = await import("fs");
+  let systemChromePath = null;
+  for (const p of candidatePaths) {
+    if (fs.existsSync(p)) {
+      systemChromePath = p;
+      break;
+    }
+  }
+
+  if (systemChromePath) {
+    try {
+      logger.info(`🚀 Launching system Chrome at ${systemChromePath}...`);
+      browser = await puppeteer.launch({
+        headless: true,
+        executablePath: systemChromePath,
+        args: ["--no-sandbox", "--disable-setuid-sandbox", "--disable-dev-shm-usage", "--disable-gpu"],
+      });
+    } catch (err) {
+      logger.warn(`⚠️ System Chrome failed (${err.message}), using Puppeteer default...`);
+    }
+  }
+
+  if (!browser) {
+    logger.info("🚀 Launching Puppeteer bundled browser...");
     browser = await puppeteer.launch({
       headless: true,
-      executablePath: "C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe",
-      args: ["--no-sandbox", "--disable-setuid-sandbox"],
-    });
-  } catch (err) {
-    logger.warn("⚠️ System Chrome not found, using Puppeteer default...");
-    browser = await puppeteer.launch({
-      headless: true,
-      args: ["--no-sandbox", "--disable-setuid-sandbox"],
+      args: ["--no-sandbox", "--disable-setuid-sandbox", "--disable-dev-shm-usage", "--disable-gpu"],
     });
   }
 
