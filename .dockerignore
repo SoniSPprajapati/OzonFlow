@@ -1,0 +1,12 @@
+node_modules
+.next
+runs
+charges-reports
+.git
+scratch
+discovery.json
+PRAJAPATI
+*.db
+*.db-journal
+*.log
+.env
