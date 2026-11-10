@@ -9,9 +9,7 @@
     "dev": "next dev -p 3000",
     "dashboard": "next dev -p 3000",
     "build": "next build",
-    "clean": "rm -rf runs/*",
-    "charges": "bun run order-charges.js",
-    "charges:discover": "bun run order-charges.js --discover"
+    "clean": "rm -rf runs/*"
   },
   "dependencies": {
     "@prisma/client": "5",

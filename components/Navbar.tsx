@@ -7,8 +7,7 @@ import {
   Users, 
   History, 
   Terminal,
-  Globe,
-  CreditCard
+  Globe
 } from "lucide-react";
 
 export function Navbar() {
@@ -17,7 +16,6 @@ export function Navbar() {
   const navItems = [
     { href: "/", label: "Dashboard", icon: LayoutDashboard },
     { href: "/accounts", label: "Accounts", icon: Users },
-    { href: "/charges", label: "Order Charges", icon: CreditCard },
     { href: "/historical", label: "Historical Reports", icon: History },
     { href: "/logs", label: "Logs", icon: Terminal },
   ];

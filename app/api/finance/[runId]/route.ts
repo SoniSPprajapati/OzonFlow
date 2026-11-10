@@ -18,10 +18,10 @@ import path from "path";
  */
 export async function GET(
   req: Request,
-  { params }: { params: { runId: string } }
+  { params }: { params: Promise<{ runId: string }> }
 ) {
   try {
-    const { runId } = params;
+    const { runId } = await params;
     const { searchParams } = new URL(req.url);
     const type = searchParams.get("type") ?? "summary";
 

@@ -46,3 +46,4 @@ EXPOSE 3000
 
 # Push SQLite schema and start Next.js web dashboard
 CMD ["sh", "-c", "bunx prisma db push && bunx next start -p 3000"]
+

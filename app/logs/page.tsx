@@ -10,6 +10,8 @@ interface PipelineRun {
   orderCount: number;
   duration: string;
   runDir: string;
+  pdfPath?: string | null;
+  excelPath?: string | null;
   error: string | null;
   startedAt: string;
   completedAt: string | null;
